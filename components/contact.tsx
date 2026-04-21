@@ -1,7 +1,6 @@
 "use client"
 
-import { motion } from "framer-motion"
-import { useInView } from "framer-motion"
+import { motion, useInView } from "framer-motion"
 import { useRef, useState } from "react"
 import { MapPin, Phone, Mail, Clock, Send, CheckCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -37,226 +36,204 @@ export function Contact() {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    setIsSubmitting(false)
-    setIsSubmitted(true)
+
+    const formData = new FormData(e.currentTarget)
+
+    const payload = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      phone: formData.get("phone"),
+      service: formData.get("service"),
+      message: formData.get("message"),
+    }
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      })
+
+      if (!res.ok) throw new Error("Failed")
+
+      setIsSubmitted(true)
+    } catch (err) {
+      console.error(err)
+      alert("Something went wrong")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
-    <section id="contact" className="py-24 bg-muted/30 relative overflow-hidden">
-      {/* Background Accent */}
-      <div className="absolute top-0 left-0 w-1/2 h-full bg-navy clip-slant" />
+    <section id="contact" className="relative py-16 sm:py-20 lg:py-24 overflow-hidden bg-navy lg:bg-transparent">
       
+      {/* Responsive Background */}
+      <div className="absolute inset-0 bg-navy lg:w-1/2 lg:clip-slant" />
+
       <div className="container mx-auto px-4 relative" ref={ref}>
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
-          {/* Left Side - Contact Info */}
+        <div className="grid gap-12 lg:grid-cols-2 items-start">
+          
+          {/* LEFT SIDE */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8 }}
-            className="text-white lg:pr-12"
+            className="text-white max-w-xl lg:pr-12"
           >
+            {/* Label */}
             <div className="inline-flex items-center gap-2 mb-4">
-              <span className="w-12 h-0.5 bg-orange" />
-              <span className="text-orange font-semibold tracking-wide text-sm uppercase">Contact Us</span>
+              <span className="w-10 h-0.5 bg-orange" />
+              <span className="text-orange text-sm font-semibold uppercase tracking-wide">
+                Contact Us
+              </span>
             </div>
-            
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 leading-tight">
-              <span className="text-balance">Ready to Get</span>
-              <br />
+
+            {/* Heading */}
+            <h2 className="text-2xl sm:text-3xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight">
+              Ready to Get <br />
               <span className="text-orange">Connected?</span>
             </h2>
-            
-            <p className="text-lg text-white/70 mb-10 leading-relaxed">
-              Whether you need fibre installation, IT support, or data solutions, 
+
+            {/* Description */}
+            <p className="text-base sm:text-lg text-white/80 mb-8 leading-relaxed">
+              Whether you need fibre installation, IT support, or data solutions,
               our team is ready to help transform your business connectivity.
             </p>
-            
-            {/* Contact Details */}
-            <div className="space-y-6">
+
+            {/* CONTACT CARDS */}
+            <div className="space-y-4 sm:space-y-6">
               {contactInfo.map((item, index) => (
                 <motion.div
                   key={item.title}
                   initial={{ opacity: 0, x: -20 }}
                   animate={isInView ? { opacity: 1, x: 0 } : {}}
                   transition={{ delay: 0.2 + index * 0.1 }}
-                  className="flex gap-4"
+                  className="flex gap-4 p-4 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10"
                 >
-                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
                     <item.icon className="w-5 h-5 text-orange" />
                   </div>
                   <div>
-                    <div className="font-semibold text-white mb-1">{item.title}</div>
+                    <div className="font-semibold text-white">{item.title}</div>
                     {item.details.map((detail, i) => (
-                      <div key={i} className="text-white/60 text-sm">{detail}</div>
+                      <div key={i} className="text-sm text-white/70">
+                        {detail}
+                      </div>
                     ))}
                   </div>
                 </motion.div>
               ))}
             </div>
-            
-            {/* Social/Trust Indicators */}
+
+            {/* TRUST + WHATSAPP */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.6 }}
-              className="mt-12 pt-8 border-t border-white/10"
+              className="mt-10 pt-6 border-t border-white/10"
             >
-              <div className="flex items-center gap-4 text-sm text-white/60">
-                <CheckCircle className="w-5 h-5 text-cyan" />
-                <span>Certified IT professionals</span>
+              <div className="space-y-3 text-sm text-white/70">
+                <div className="flex items-center gap-3">
+                  <CheckCircle className="w-5 h-5 text-cyan" />
+                  Certified IT professionals
+                </div>
+                <div className="flex items-center gap-3">
+                  <CheckCircle className="w-5 h-5 text-cyan" />
+                  Free consultation & site survey
+                </div>
+                <div className="flex items-center gap-3">
+                  <CheckCircle className="w-5 h-5 text-cyan" />
+                  24/7 customer support
+                </div>
               </div>
-              <div className="flex items-center gap-4 text-sm text-white/60 mt-3">
-                <CheckCircle className="w-5 h-5 text-cyan" />
-                <span>Free consultation & site survey</span>
-              </div>
-              <div className="flex items-center gap-4 text-sm text-white/60 mt-3">
-                <CheckCircle className="w-5 h-5 text-cyan" />
-                <span>24/7 customer support</span>
-              </div>
+
+              {/* WhatsApp Button */}
+              <a
+                href="https://wa.me/263000000000?text=Hi%20Tiger%20Web%2C%20I%20need%20more%20info"
+                target="_blank"
+                className="inline-block mt-6"
+              >
+                <Button className="bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-3 rounded-lg shadow-lg">
+                  Chat on WhatsApp
+                </Button>
+              </a>
             </motion.div>
           </motion.div>
-          
-          {/* Right Side - Contact Form */}
+
+          {/* RIGHT SIDE FORM */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <div className="bg-white rounded-3xl shadow-2xl p-8 lg:p-10">
+            <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl p-6 sm:p-8 lg:p-10">
+              
               {!isSubmitted ? (
                 <>
-                  <h3 className="text-2xl font-bold text-navy mb-2">Send us a message</h3>
-                  <p className="text-muted-foreground mb-8">
-                    Fill out the form below and we&apos;ll get back to you within 24 hours
+                  <h3 className="text-xl sm:text-2xl font-bold text-navy mb-2">
+                    Send us a message
+                  </h3>
+                  <p className="text-muted-foreground mb-6 sm:mb-8">
+                    We’ll get back to you within 24 hours
                   </p>
-                  
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      <div>
-                        <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
-                          Full Name
-                        </label>
-                        <Input 
-                          id="name"
-                          placeholder="John Doe" 
-                          required
-                          className="h-12 bg-muted/50 border-border focus:border-navy"
-                        />
-                      </div>
-                      <div>
-                        <label htmlFor="company" className="block text-sm font-medium text-foreground mb-2">
-                          Company
-                        </label>
-                        <Input 
-                          id="company"
-                          placeholder="Your Company" 
-                          className="h-12 bg-muted/50 border-border focus:border-navy"
-                        />
-                      </div>
-                    </div>
+
+                  <form onSubmit={handleSubmit} className="space-y-5">
                     
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
-                          Email Address
-                        </label>
-                        <Input 
-                          id="email"
-                          type="email" 
-                          placeholder="john@example.com" 
-                          required
-                          className="h-12 bg-muted/50 border-border focus:border-navy"
-                        />
-                      </div>
-                      <div>
-                        <label htmlFor="phone" className="block text-sm font-medium text-foreground mb-2">
-                          Phone Number
-                        </label>
-                        <Input 
-                          id="phone"
-                          type="tel" 
-                          placeholder="+263 000 000 000" 
-                          className="h-12 bg-muted/50 border-border focus:border-navy"
-                        />
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <label htmlFor="service" className="block text-sm font-medium text-foreground mb-2">
-                        Service Interest
-                      </label>
-                      <select 
-                        id="service"
-                        className="w-full h-12 px-4 rounded-md bg-muted/50 border border-border text-foreground focus:border-navy focus:outline-none focus:ring-2 focus:ring-navy/20"
-                        required
-                      >
-                        <option value="">Select a service</option>
-                        <option value="fibre">Fibre Installation</option>
-                        <option value="analytics">Data Analytics</option>
-                        <option value="informatics">Informatics</option>
-                        <option value="it-services">IT Services</option>
-                        <option value="other">Other</option>
-                      </select>
-                    </div>
-                    
-                    <div>
-                      <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">
-                        Message
-                      </label>
-                      <Textarea 
-                        id="message"
-                        placeholder="Tell us about your project or requirements..." 
-                        rows={4}
-                        required
-                        className="bg-muted/50 border-border focus:border-navy resize-none"
-                      />
-                    </div>
-                    
-                    <Button 
+                    <Input name="name" placeholder="Full Name" required className="h-12" />
+                    <Input name="company" placeholder="Company (optional)" className="h-12" />
+
+                    <Input type="email" name="email" placeholder="Email Address" required className="h-12" />
+                    <Input type="tel" name="phone" placeholder="Phone Number" className="h-12" />
+
+                    <select
+                      name="service"
+                      required
+                      className="w-full h-12 px-4 rounded-md border bg-muted/50"
+                    >
+                      <option value="">Select a service</option>
+                      <option value="fibre">Fibre Installation</option>
+                      <option value="analytics">Data Analytics</option>
+                      <option value="informatics">Informatics</option>
+                      <option value="it-services">IT Services</option>
+                      <option value="other">Other</option>
+                    </select>
+
+                    <Textarea
+                      name="message"
+                      placeholder="Tell us about your project..."
+                      rows={4}
+                      required
+                    />
+
+                    <Button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full bg-navy hover:bg-navy-light text-white font-semibold py-6 text-lg"
+                      className="w-full bg-navy hover:bg-navy-light text-white py-5 text-base sm:text-lg"
                     >
-                      {isSubmitting ? (
-                        <>
-                          <span className="animate-spin mr-2">⏳</span>
-                          Sending...
-                        </>
-                      ) : (
-                        <>
-                          Send Message
-                          <Send className="ml-2 h-5 w-5" />
-                        </>
-                      )}
+                      {isSubmitting ? "Sending..." : "Send Message"}
+                      {!isSubmitting && <Send className="ml-2 h-5 w-5" />}
                     </Button>
                   </form>
                 </>
               ) : (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="text-center py-12"
-                >
-                  <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6">
-                    <CheckCircle className="w-10 h-10 text-green-600" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-navy mb-2">Message Sent!</h3>
-                  <p className="text-muted-foreground mb-6">
-                    Thank you for reaching out. We&apos;ll get back to you within 24 hours.
+                <div className="text-center py-10">
+                  <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
+                  <h3 className="text-xl font-bold text-navy mb-2">
+                    Message Sent!
+                  </h3>
+                  <p className="text-muted-foreground mb-4">
+                    We’ll get back to you within 24 hours.
                   </p>
-                  <Button 
-                    onClick={() => setIsSubmitted(false)}
-                    variant="outline"
-                    className="border-navy text-navy hover:bg-navy hover:text-white"
-                  >
-                    Send Another Message
+                  <Button onClick={() => setIsSubmitted(false)}>
+                    Send Another
                   </Button>
-                </motion.div>
+                </div>
               )}
             </div>
           </motion.div>

@@ -46,16 +46,13 @@ export function Footer() {
         <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12">
           {/* Brand Column */}
           <div className="lg:col-span-2">
-            <Link href="/" className="inline-block mb-6">
-              <Image
-                src="/images/logo.png"
-                alt="Tiger Web Logo"
-                width={160}
-                height={50}
-                className="h-10 w-auto brightness-0 invert"
-              />
-            </Link>
-            
+            <Image
+              src="/images/logo.png"
+              alt="Tiger Web Logo"
+              width={160}
+              height={50}
+              className="h-10 w-auto"
+            />            
             <p className="text-white/60 mb-6 max-w-sm leading-relaxed">
               Connecting Data. Powering Futures. Tiger Web provides cutting-edge 
               IT solutions including fibre installation, data analytics, and 
