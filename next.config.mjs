@@ -1,12 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',  // ADD THIS - critical for Vercel deployment
+  output: 'export',  // Change from 'standalone' to 'export'
   typescript: {
     ignoreBuildErrors: true,
   },
   images: {
     unoptimized: true,
   },
+  trailingSlash: true,  // Important for static exports
 }
 
 export default nextConfig
