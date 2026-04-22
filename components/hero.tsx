@@ -225,7 +225,7 @@ export function Hero() {
                 className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full mb-6"
               >
                 <span className="w-2 h-2 bg-orange rounded-full animate-pulse" />
-                <span className="text-sm font-medium">Leading IT Solutions Provider</span>
+                <span className="text-sm font-medium">Leading Network and IoT Solutions Provider</span>
               </motion.div>
               
               {/* Headline */}
