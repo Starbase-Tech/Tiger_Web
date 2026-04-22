@@ -155,7 +155,7 @@ export function Contact() {
 
               {/* WhatsApp Button */}
               <a
-                href="https://wa.me/27611023526?text=Hi%20Tiger%20Web%2C%20I%20need%20more%20info"
+                href="https://wa.me/27611023526?text=Hi%20Tigerweb%20Group%2C%20I%20need%20more%20info"
                 target="_blank"
                 className="inline-block mt-6"
               >
