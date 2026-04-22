@@ -159,7 +159,7 @@ export function About() {
             </h2>
             
             <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-              Tiger Web is a leading IT solutions provider specializing in fibre infrastructure, 
+              Tigerweb Group is a leading IT solutions provider specializing in fibre infrastructure, 
               data analytics, and comprehensive technology services. We empower businesses 
               to thrive in the digital age with reliable, high-speed connectivity and 
               intelligent data solutions.

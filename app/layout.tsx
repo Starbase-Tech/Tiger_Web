@@ -9,11 +9,11 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'Tiger Web | Connecting Data. Powering Futures.',
-  description: 'Tiger Web provides expert IT services including Fibre Installation, Data Analytics, Informatics, and comprehensive IT Solutions. Connecting your business to the future.',
+  title: 'Tigerweb Group | Connecting Data. Powering Futures.',
+  description: 'Tigerweb Group provides expert IT services including Fibre Installation, Data Analytics, Informatics, and comprehensive IT Solutions. Connecting your business to the future.',
   keywords: 'fibre installation, IT services, data analytics, informatics, network solutions, internet connectivity',
   openGraph: {
-    title: 'Tiger Web | Connecting Data. Powering Futures.',
+    title: 'Tigerweb Group | Connecting Data. Powering Futures.',
     description: 'Expert IT services including Fibre Installation, Data Analytics, Informatics, and comprehensive IT Solutions.',
     type: 'website',
   },

@@ -7,211 +7,334 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight, Play } from "lucide-react"
 import { FiberAnimation } from "./fiber-animation"
 
+// ─── CSS for animated cards ───────────────────────────────────────────
+const CardCSS = `
+  @keyframes float-a {
+    0%,100% { transform: translateY(0px) rotate(0deg); }
+    33% { transform: translateY(-18px) rotate(1.5deg); }
+    66% { transform: translateY(-8px) rotate(-1deg); }
+  }
+  @keyframes float-b {
+    0%,100% { transform: translateY(0px) rotate(0deg); }
+    33% { transform: translateY(-14px) rotate(-2deg); }
+    66% { transform: translateY(-22px) rotate(1deg); }
+  }
+  @keyframes float-c {
+    0%,100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(2deg); }
+  }
+  @keyframes float-d {
+    0%,100% { transform: translateY(0px) rotate(0deg); }
+    40% { transform: translateY(-12px) rotate(-1.5deg); }
+    80% { transform: translateY(-24px) rotate(1deg); }
+  }
+  @keyframes pulse-ring {
+    0% { transform: scale(0.9); opacity: 0.6; }
+    70% { transform: scale(1.4); opacity: 0; }
+    100% { transform: scale(1.4); opacity: 0; }
+  }
+  @keyframes card-glow {
+    0%,100% { box-shadow: 0 0 20px rgba(6,182,212,0.2), 0 8px 32px rgba(0,0,0,0.4); }
+    50% { box-shadow: 0 0 40px rgba(6,182,212,0.45), 0 8px 32px rgba(0,0,0,0.4); }
+  }
+
+  .hero-right-section {
+    position: relative;
+    height: 600px;
+    width: 100%;
+  }
+  .card-wrap {
+    position: absolute;
+    cursor: pointer;
+  }
+  /* Updated positions for larger cards */
+  .card-wrap:nth-child(1) { top: 0; left: 40px; animation: float-a 6s ease-in-out infinite; }
+  .card-wrap:nth-child(2) { top: 60px; right: 0; animation: float-b 7.5s ease-in-out infinite; }
+  .card-wrap:nth-child(3) { bottom: 80px; left: 0; animation: float-c 5.5s ease-in-out infinite; }
+  .card-wrap:nth-child(4) { bottom: 20px; right: 40px; animation: float-d 8s ease-in-out infinite; }
+  
+  .service-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(6,182,212,0.25);
+    border-radius: 24px;
+    padding: 24px;
+    backdrop-filter: blur(16px);
+    animation: card-glow 4s ease-in-out infinite;
+    transition: transform 0.3s, border-color 0.3s;
+    position: relative;
+    overflow: hidden;
+    min-width: 220px;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute; top: 0; left: -100%;
+    width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+    transition: left 0.6s ease;
+  }
+  .card-wrap:hover .service-card {
+    transform: scale(1.06);
+    border-color: rgba(6,182,212,0.6);
+  }
+  .card-wrap:hover .service-card::before { left: 140%; }
+  
+  .card-img-wrap {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .card-img-wrap img {
+    width: 220px;
+    height: 160px;
+    object-fit: cover;
+    display: block;
+    border-radius: 16px;
+    transition: transform 0.4s;
+  }
+  .card-wrap:hover .card-img-wrap img { transform: scale(1.08); }
+  .card-img-wrap::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(10,22,40,0.7) 100%);
+    border-radius: 16px;
+  }
+  .card-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #06b6d4;
+    margin-top: 14px;
+    padding: 0 4px;
+  }
+  .card-desc {
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+    margin-top: 6px;
+    padding: 0 4px;
+  }
+  .card-ping {
+    position: absolute; top: -8px; right: -8px;
+    width: 18px;
+    height: 18px;
+    z-index: 10;
+  }
+  .card-ping span {
+    position: absolute; inset: 0;
+    border-radius: 50%;
+    background: #f97316;
+    animation: pulse-ring 2s ease infinite;
+  }
+  .card-ping span:last-child {
+    animation: none;
+    width: 10px;
+    height: 10px;
+    top: 4px;
+    left: 4px;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 1280px) {
+    .service-card {
+      min-width: 180px;
+      padding: 18px;
+    }
+    .card-img-wrap img {
+      width: 180px;
+      height: 130px;
+    }
+    .card-label {
+      font-size: 14px;
+    }
+    .card-desc {
+      font-size: 11px;
+    }
+  }
+`
+
+const CARDS = [
+  {
+    src: "/images/fibre.jpg",
+    label: "FIBRE",
+    desc: "High-speed connectivity",
+    ping: true,
+  },
+  {
+    src: "/images/analytics.jpg",
+    label: "ANALYTICS",
+    desc: "Intelligent data insights",
+    ping: false,
+  },
+  {
+    src: "/images/it_services.jpg",
+    label: "IT SERVICES",
+    desc: "End-to-end solutions",
+    ping: true,
+  },
+  {
+    src: "/images/informatics.jpg",
+    label: "NETWORKING",
+    desc: "Secure infrastructure",
+    ping: false,
+  },
+]
+
 export function Hero() {
   const [mounted, setMounted] = useState(false)
+
   useEffect(() => {
     setMounted(true)
   }, [])
 
   if (!mounted) return null
+
   return (
-    <section id="home" className="relative min-h-[90vh] flex items-center overflow-hidden">
-      {/* Navy Background with Diagonal */}
-      <div className="absolute inset-0 bg-navy clip-diagonal" />
+    <>
+      <style dangerouslySetInnerHTML={{ __html: CardCSS }} />
       
-      {/* Animated Fiber Background */}
-      <FiberAnimation />
-      
-      {/* Geometric Accents */}
-      <div className="absolute top-20 right-0 w-[600px] h-[600px] opacity-10">
-        <div className="absolute inset-0 border-2 border-cyan rotate-45 rounded-3xl" />
-        <div className="absolute inset-8 border border-orange rotate-12 rounded-3xl" />
-      </div>
-      
-      {/* Content */}
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left Content */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-primary-foreground"
-          >
-            {/* Badge */}
+      <section id="home" className="relative min-h-[90vh] flex items-center overflow-hidden">
+        {/* Navy Background with Diagonal */}
+        <div className="absolute inset-0 bg-navy clip-diagonal" />
+        
+        {/* Animated Fiber Background */}
+        <FiberAnimation />
+        
+        {/* Geometric Accents */}
+        <div className="absolute top-20 right-0 w-[600px] h-[600px] opacity-10">
+          <div className="absolute inset-0 border-2 border-cyan rotate-45 rounded-3xl" />
+          <div className="absolute inset-8 border border-orange rotate-12 rounded-3xl" />
+        </div>
+        
+        {/* Content */}
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            
+            {/* LEFT CONTENT */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full mb-6"
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-primary-foreground"
             >
-              <span className="w-2 h-2 bg-orange rounded-full animate-pulse" />
-              <span className="text-sm font-medium">Leading IT Solutions Provider</span>
-            </motion.div>
-            
-            {/* Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight mb-6">
-              <span className="block text-balance">Connecting</span>
-              <span className="block text-orange">Data.</span>
-              <span className="block text-balance">Powering</span>
-              <span className="block text-cyan">Futures.</span>
-            </h1>
-            
-            {/* Subheadline */}
-            <p className="text-lg sm:text-xl text-white/80 max-w-xl mb-8 leading-relaxed">
-              Transform your business with high-speed fibre connectivity, 
-              intelligent data analytics, and comprehensive IT solutions 
-              tailored for the modern enterprise.
-            </p>
-            
-            {/* CTAs */}
-            <div className="flex flex-wrap gap-4">
-              <Button 
-                asChild
-                size="lg"
-                className="bg-orange hover:bg-orange-light text-navy font-bold px-8 py-6 text-lg shadow-2xl hover:shadow-orange/20 transition-all"
+              {/* Badge */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full mb-6"
               >
-                <Link href="#contact">
-                  Get Fibre Installed
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-              <Button 
-                asChild
-                size="lg"
-                variant="outline"
-                className="border-2 border-white/30 bg-white/5 text-white hover:bg-white/10 hover:text-white px-8 py-6 text-lg backdrop-blur-sm"
-              >
-                <Link href="#services">
-                  <Play className="mr-2 h-5 w-5" />
-                  Explore Services
-                </Link>
-              </Button>
-            </div>
-            
-            {/* Stats */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="grid grid-cols-3 gap-6 mt-12 pt-8 border-t border-white/10"
-            >
-              {[
-                { value: "500+", label: "Installations" },
-                { value: "99.9%", label: "Uptime" },
-                { value: "24/7", label: "Support" },
-              ].map((stat, index) => (
-                <div key={index}>
-                  <div className="text-2xl sm:text-3xl font-bold text-orange">{stat.value}</div>
-                  <div className="text-sm text-white/60">{stat.label}</div>
-                </div>
-              ))}
-            </motion.div>
-          </motion.div>
-          
-          {/* Right Content - Fiber Illustration */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="hidden lg:flex items-center justify-center relative"
-          >
-            <div className="relative w-full aspect-square max-w-lg">
-              {/* Central Node */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-gradient-to-br from-cyan to-orange rounded-full glow-node flex items-center justify-center">
-                <div className="w-20 h-20 bg-navy rounded-full flex items-center justify-center">
-                  <div className="w-4 h-4 bg-cyan rounded-full animate-pulse" />
-                </div>
+                <span className="w-2 h-2 bg-orange rounded-full animate-pulse" />
+                <span className="text-sm font-medium">Leading IT Solutions Provider</span>
+              </motion.div>
+              
+              {/* Headline */}
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight mb-6">
+                <span className="block text-balance">Connecting</span>
+                <span className="block text-orange">Data.</span>
+                <span className="block text-balance">Powering</span>
+                <span className="block text-cyan">Futures.</span>
+              </h1>
+              
+              {/* Subheadline */}
+              <p className="text-lg sm:text-xl text-white/80 max-w-xl mb-8 leading-relaxed">
+                Transform your business with high-speed fibre connectivity, 
+                intelligent data analytics, and comprehensive IT solutions 
+                tailored for the modern enterprise.
+              </p>
+              
+              {/* CTAs */}
+              <div className="flex flex-wrap gap-4">
+                <Button 
+                  asChild
+                  size="lg"
+                  className="bg-orange hover:bg-orange-light text-navy font-bold px-8 py-6 text-lg shadow-2xl hover:shadow-orange/20 transition-all"
+                >
+                  <Link href="#contact">
+                    Get Fibre Installed
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
+                </Button>
+                <Button 
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="border-2 border-white/30 bg-white/5 text-white hover:bg-white/10 hover:text-white px-8 py-6 text-lg backdrop-blur-sm"
+                >
+                  <Link href="#services">
+                    <Play className="mr-2 h-5 w-5" />
+                    Explore Services
+                  </Link>
+                </Button>
               </div>
               
-              {/* Orbiting Elements */}
-              {[0, 60, 120, 180, 240, 300].map((angle, index) => (
-                <motion.div
-                  key={index}
-                  className="absolute top-1/2 left-1/2 w-4 h-4"
-                  style={{
-                    transform: `rotate(${angle}deg) translateX(180px) rotate(-${angle}deg)`,
-                  }}
-                  animate={{
-                    scale: [1, 1.3, 1],
-                    opacity: [0.5, 1, 0.5],
-                  }}
-                  transition={{
-                    duration: 2,
-                    delay: index * 0.3,
-                    repeat: Infinity,
-                  }}
-                >
-                  <div className="w-4 h-4 bg-cyan rounded-full shadow-lg shadow-cyan/50" />
-                </motion.div>
-              ))}
-              
-              {/* Connecting Lines */}
-              <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 400">
-                {[0, 60, 120, 180, 240, 300].map((angle, index) => (
-                  <motion.line
-                    key={index}
-                    x1="200"
-                    y1="200"
-                    x2={200 + 180 * Math.cos((angle * Math.PI) / 180)}
-                    y2={200 + 180 * Math.sin((angle * Math.PI) / 180)}
-                    stroke="url(#fiber-gradient)"
-                    strokeWidth="2"
-                    strokeDasharray="5,5"
-                    initial={{ pathLength: 0, opacity: 0 }}
-                    animate={{ pathLength: 1, opacity: 0.6 }}
-                    transition={{ duration: 1.5, delay: index * 0.2 }}
-                  />
+              {/* Stats */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+                className="grid grid-cols-3 gap-6 mt-12 pt-8 border-t border-white/10"
+              >
+                {[
+                  { value: "500+", label: "Installations" },
+                  { value: "99.9%", label: "Uptime" },
+                  { value: "24/7", label: "Support" },
+                ].map((stat, index) => (
+                  <div key={index}>
+                    <div className="text-2xl sm:text-3xl font-bold text-orange">{stat.value}</div>
+                    <div className="text-sm text-white/60">{stat.label}</div>
+                  </div>
                 ))}
-                <defs>
-                  <linearGradient id="fiber-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#00B4D8" />
-                    <stop offset="100%" stopColor="#FF7A00" />
-                  </linearGradient>
-                </defs>
-              </svg>
-              
-              {/* Service Labels */}
-              {[
-                { label: "FIBRE", angle: 0 },
-                { label: "DATA", angle: 120 },
-                { label: "IT", angle: 240 },
-              ].map((item, index) => (
-                <motion.div
-                  key={item.label}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 1 + index * 0.2 }}
-                  className="absolute text-xs font-bold text-cyan tracking-widest"
-                  style={{
-                    top: `${50 + 38 * Math.sin((item.angle * Math.PI) / 180)}%`,
-                    left: `${50 + 38 * Math.cos((item.angle * Math.PI) / 180)}%`,
-                    transform: 'translate(-50%, -50%)',
-                  }}
-                >
-                  {item.label}
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+              </motion.div>
+            </motion.div>
+            
+            {/* RIGHT CONTENT - Larger Animated Cards */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="hidden lg:flex items-center justify-center relative"
+            >
+              <div className="hero-right-section">
+                {CARDS.map((card, i) => (
+                  <div className="card-wrap" key={i}>
+                    <div className="service-card">
+                      {card.ping && (
+                        <div className="card-ping">
+                          <span />
+                          <span />
+                        </div>
+                      )}
+                      <div className="card-img-wrap">
+                        <img src={card.src} alt={card.label} />
+                      </div>
+                      <div className="card-label">{card.label}</div>
+                      <div className="card-desc">{card.desc}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+            
+          </div>
         </div>
-      </div>
-      
-      {/* Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
-      >
+        
+        {/* Scroll Indicator */}
         <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-          className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center pt-2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
         >
-          <div className="w-1.5 h-3 bg-orange rounded-full" />
+          <motion.div
+            animate={{ y: [0, 10, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+            className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center pt-2"
+          >
+            <div className="w-1.5 h-3 bg-orange rounded-full" />
+          </motion.div>
         </motion.div>
-      </motion.div>
-    </section>
+      </section>
+    </>
   )
 }

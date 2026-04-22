@@ -16,7 +16,7 @@ const contactInfo = [
   {
     icon: Phone,
     title: "Call Us",
-    details: ["+27 61 102 3526", "+27 78 900 6759 "],
+    details: ["+27 78 900 6759", "+27 61 102 3526"],
   },
   {
     icon: Mail,
@@ -155,7 +155,7 @@ export function Contact() {
 
               {/* WhatsApp Button */}
               <a
-                href="https://wa.me/263000000000?text=Hi%20Tiger%20Web%2C%20I%20need%20more%20info"
+                href="https://wa.me/27611023526?text=Hi%20Tiger%20Web%2C%20I%20need%20more%20info"
                 target="_blank"
                 className="inline-block mt-6"
               >
