@@ -46,7 +46,7 @@ export function Header() {
             <div className="flex items-center gap-6">
               <a href="tel:+263000000000" className="flex items-center gap-2 hover:text-orange transition-colors">
                 <Phone className="h-4 w-4 text-orange" />
-                <span className="hidden sm:inline">+27 61 102 3526</span>
+                <span className="hidden sm:inline">+27 78 900 6759</span>
               </a>
               <a href="mailto:info@tigerweb.co.zw" className="flex items-center gap-2 hover:text-orange transition-colors">
                 <Mail className="h-4 w-4 text-orange" />
