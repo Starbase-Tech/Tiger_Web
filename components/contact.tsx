@@ -11,17 +11,17 @@ const contactInfo = [
   {
     icon: MapPin,
     title: "Visit Us",
-    details: ["Pretoria, South Africa"],
+    details: ["5 Abelia Rd, Primrose Hill, Germiston, South Africa"],
   },
   {
     icon: Phone,
     title: "Call Us",
-    details: ["+27 000 000 000", "+27 000 000 001"],
+    details: ["+27 61 102 3526", "+27 78 900 6759 "],
   },
   {
     icon: Mail,
     title: "Email Us",
-    details: ["info@tigerweb.co.za", "support@tigerweb.co.za"],
+    details: ["info@tigerweb.co.za", "support@tigerweb.co.za", "admin@tigerweb.co.za"],
   },
   {
     icon: Clock,
