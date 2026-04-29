@@ -3,7 +3,14 @@
 import { motion } from "framer-motion"
 import { useInView } from "framer-motion"
 import { useRef, useState } from "react"
-import { Cable, BarChart3, Database, Server, ArrowRight, Check } from "lucide-react"
+import {
+  Cable,
+  BarChart3,
+  Database,
+  Server,
+  ArrowRight,
+  Check,
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
@@ -13,13 +20,14 @@ const services = [
     icon: Cable,
     title: "Fibre Installation",
     subtitle: "High-Speed Connectivity",
-    description: "Enterprise-grade fibre optic installations delivering blazing-fast internet speeds for homes and businesses. Experience seamless connectivity with our professional installation services.",
+    description:
+      "Enterprise-grade fibre optic installations delivering blazing-fast internet speeds for homes and businesses. Experience seamless connectivity with our professional installation services.",
     features: [
-      "Up to 1Gbps speeds",
-      "Professional installation",
-      "24/7 monitoring",
-      "99.9% uptime guarantee",
-      "Scalable solutions",
+      "High-speed fibre deployment for homes and businesses",
+      "Structured cabling and network planning",
+      "Professional installation and testing",
+      "24/7 monitoring and uptime support",
+      "Scalable enterprise connectivity solutions",
     ],
     color: "orange",
     featured: true,
@@ -29,13 +37,16 @@ const services = [
     icon: BarChart3,
     title: "Data Analytics",
     subtitle: "Intelligent Insights",
-    description: "Transform raw data into actionable insights with our advanced analytics solutions. Make informed decisions powered by real-time data visualization and predictive analytics.",
+    description:
+      "Transform raw data into actionable insights with advanced analytics solutions designed to improve decision-making and operational efficiency.",
     features: [
-      "Real-time dashboards",
-      "Predictive analytics",
-      "Custom reporting",
-      "Data visualization",
-      "AI-powered insights",
+      "Data Engineering – TigerWeb Group provides data pipelines, ETL processes, and structured data flow management for reliable reporting.",
+      "Analytics Audit – We assess your current reporting systems, identify gaps, and improve decision-making accuracy.",
+      "Data Visualization (Power BI) – Interactive dashboards and visual reporting for real-time business performance tracking.",
+      "Predictive Analytics – Forecast trends, customer behavior, and business outcomes using data-driven models.",
+      "Reports and Presentation – Executive-ready reports and presentation packs for stakeholders and management teams.",
+      "Model Context Protocol (MCP) – Smart integration of context-aware systems for better automation and AI workflows.",
+      "Business Intelligence (BI) – Strategic reporting systems that turn operational data into executive insights.",
     ],
     color: "cyan",
     featured: false,
@@ -45,13 +56,14 @@ const services = [
     icon: Database,
     title: "Informatics",
     subtitle: "Data Management",
-    description: "Comprehensive data management and information systems that streamline your operations. From database design to system integration, we handle your information needs.",
+    description:
+      "Comprehensive information systems and data management solutions that streamline business operations and improve information flow.",
     features: [
-      "Database management",
-      "System integration",
-      "Data migration",
-      "Information security",
-      "Cloud solutions",
+      "Database management and optimization",
+      "System integration across departments",
+      "Secure data migration services",
+      "Information governance and security",
+      "Cloud infrastructure and storage solutions",
     ],
     color: "navy",
     featured: false,
@@ -61,13 +73,14 @@ const services = [
     icon: Server,
     title: "IT Services",
     subtitle: "Complete Solutions",
-    description: "End-to-end IT support and managed services keeping your business running smoothly. From helpdesk support to infrastructure management, we&apos;ve got you covered.",
+    description:
+      "End-to-end IT support and managed services keeping your business running smoothly with reliable infrastructure and expert support.",
     features: [
-      "Managed IT support",
-      "Network security",
-      "Cloud migration",
-      "Hardware solutions",
-      "IT consulting",
+      "Managed IT support and helpdesk services",
+      "Network setup and cybersecurity protection",
+      "Cloud migration and system modernization",
+      "Hardware procurement and maintenance",
+      "Strategic IT consulting and infrastructure planning",
     ],
     color: "navy",
     featured: false,
@@ -77,11 +90,10 @@ const services = [
 export function Services() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
-  const [hoveredService, setHoveredService] = useState<string | null>(null)
+  const [activeService, setActiveService] = useState<string | null>(null)
 
   return (
     <section id="services" className="py-24 bg-muted/30 relative overflow-hidden">
-      {/* Background Pattern */}
       <div className="absolute inset-0 opacity-30">
         <svg className="w-full h-full">
           <defs>
@@ -92,9 +104,8 @@ export function Services() {
           <rect width="100%" height="100%" fill="url(#service-grid)" />
         </svg>
       </div>
-      
+
       <div className="container mx-auto px-4 relative" ref={ref}>
-        {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -103,21 +114,22 @@ export function Services() {
         >
           <div className="inline-flex items-center gap-2 mb-4">
             <span className="w-12 h-0.5 bg-orange" />
-            <span className="text-orange font-semibold tracking-wide text-sm uppercase">Our Services</span>
+            <span className="text-orange font-semibold tracking-wide text-sm uppercase">
+              Our Services
+            </span>
             <span className="w-12 h-0.5 bg-orange" />
           </div>
-          
+
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-navy mb-6">
-            <span className="text-balance">Comprehensive IT Solutions</span>
+            Comprehensive IT Solutions
           </h2>
-          
+
           <p className="text-lg text-muted-foreground">
-            From high-speed fibre installations to intelligent data analytics, 
+            From fibre installations to business intelligence and enterprise IT support,
             we provide end-to-end technology solutions for the modern enterprise.
           </p>
         </motion.div>
-        
-        {/* Services Grid */}
+
         <div className="grid md:grid-cols-2 gap-8">
           {services.map((service, index) => (
             <motion.div
@@ -125,94 +137,51 @@ export function Services() {
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: index * 0.1 }}
-              onMouseEnter={() => setHoveredService(service.id)}
-              onMouseLeave={() => setHoveredService(null)}
-              className={`group relative ${service.featured ? 'md:col-span-2' : ''}`}
+              className={`relative ${service.featured ? "md:col-span-2" : ""}`}
             >
-              <div className={`
-                relative bg-white rounded-2xl overflow-hidden transition-all duration-500
-                ${hoveredService === service.id ? 'shadow-2xl scale-[1.02]' : 'shadow-lg'}
-                ${service.featured ? 'border-2 border-orange' : 'border border-border'}
-              `}>
-                {/* Featured Badge */}
-                {service.featured && (
-                  <div className="absolute top-4 right-4 bg-orange text-navy text-xs font-bold px-3 py-1 rounded-full z-10">
-                    MOST POPULAR
+              <div
+                onClick={() =>
+                  setActiveService(activeService === service.id ? null : service.id)
+                }
+                className={`cursor-pointer bg-white rounded-2xl border transition-all duration-300 overflow-hidden
+                  ${service.featured ? "border-orange" : "border-border"}
+                  ${activeService === service.id ? "shadow-2xl" : "shadow-lg"}`}
+              >
+                <div className="p-8">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-xl mb-6 bg-muted">
+                    <service.icon className="w-8 h-8 text-navy" />
                   </div>
-                )}
-                
-                <div className={`p-8 ${service.featured ? 'lg:flex lg:items-center lg:gap-12' : ''}`}>
-                  {/* Icon & Title */}
-                  <div className={service.featured ? 'lg:w-1/2' : ''}>
-                    <div className={`
-                      inline-flex items-center justify-center w-16 h-16 rounded-xl mb-6 transition-all duration-300
-                      ${service.color === 'orange' ? 'bg-orange/10 text-orange group-hover:bg-orange group-hover:text-navy' : ''}
-                      ${service.color === 'cyan' ? 'bg-cyan/10 text-cyan group-hover:bg-cyan group-hover:text-navy' : ''}
-                      ${service.color === 'navy' ? 'bg-navy/10 text-navy group-hover:bg-navy group-hover:text-white' : ''}
-                    `}>
-                      <service.icon className="w-8 h-8" />
-                    </div>
-                    
-                    <div className="text-sm text-muted-foreground font-medium mb-2">{service.subtitle}</div>
-                    <h3 className="text-2xl font-bold text-navy mb-4">{service.title}</h3>
-                    <p className="text-muted-foreground mb-6 leading-relaxed">{service.description}</p>
-                    
-                    {!service.featured && (
-                      <Button 
-                        asChild
-                        variant="ghost" 
-                        className="text-navy hover:text-orange hover:bg-orange/10 p-0 h-auto font-semibold group/btn"
-                      >
-                        <Link href="#contact">
-                          Learn More
-                          <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
-                        </Link>
-                      </Button>
-                    )}
+
+                  <div className="text-sm text-muted-foreground font-medium mb-2">
+                    {service.subtitle}
                   </div>
-                  
-                  {/* Features List */}
-                  <div className={service.featured ? 'lg:w-1/2 mt-8 lg:mt-0' : 'hidden'}>
-                    <div className="bg-muted/50 rounded-xl p-6">
-                      <div className="text-sm font-semibold text-navy mb-4 uppercase tracking-wide">What&apos;s Included</div>
-                      <ul className="space-y-3">
-                        {service.features.map((feature, i) => (
-                          <motion.li
-                            key={i}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={isInView ? { opacity: 1, x: 0 } : {}}
-                            transition={{ delay: 0.4 + i * 0.1 }}
-                            className="flex items-center gap-3"
-                          >
-                            <div className="w-5 h-5 rounded-full bg-orange/10 flex items-center justify-center flex-shrink-0">
-                              <Check className="w-3 h-3 text-orange" />
-                            </div>
-                            <span className="text-foreground">{feature}</span>
-                          </motion.li>
-                        ))}
-                      </ul>
-                      
-                      <Button 
-                        asChild
-                        className="w-full mt-6 bg-navy hover:bg-navy-light text-white font-semibold py-6"
-                      >
+                  <h3 className="text-2xl font-bold text-navy mb-4">{service.title}</h3>
+                  <p className="text-muted-foreground mb-6 leading-relaxed">
+                    {service.description}
+                  </p>
+
+                  {activeService === service.id && (
+                    <div className="space-y-4 border-t pt-6 mt-6">
+                      {service.features.map((feature, i) => (
+                        <div key={i} className="flex items-start gap-3">
+                          <div className="w-5 h-5 rounded-full bg-orange/10 flex items-center justify-center mt-1 flex-shrink-0">
+                            <Check className="w-3 h-3 text-orange" />
+                          </div>
+                          <p className="text-sm text-foreground leading-relaxed">
+                            {feature}
+                          </p>
+                        </div>
+                      ))}
+
+                      <Button asChild className="mt-4 bg-navy hover:bg-navy-light text-white">
                         <Link href="#contact">
-                          Get Fibre Now
+                          Get Started
                           <ArrowRight className="ml-2 h-4 w-4" />
                         </Link>
                       </Button>
                     </div>
-                  </div>
+                  )}
                 </div>
-                
-                {/* Bottom Accent Line */}
-                <div className={`
-                  absolute bottom-0 left-0 h-1 transition-all duration-500
-                  ${hoveredService === service.id ? 'w-full' : 'w-0'}
-                  ${service.color === 'orange' ? 'bg-orange' : ''}
-                  ${service.color === 'cyan' ? 'bg-cyan' : ''}
-                  ${service.color === 'navy' ? 'bg-navy' : ''}
-                `} />
               </div>
             </motion.div>
           ))}

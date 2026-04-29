@@ -72,7 +72,7 @@ export function Header() {
             {/* Logo */}
             <Link href="/" className="relative z-10">
               <Image
-                src="/images/logo.png"
+                src="/images/logo1.png"
                 alt="Tiger Web Logo"
                 width={180}
                 height={60}
